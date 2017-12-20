@@ -94,3 +94,30 @@ Những yếu tố nào ảnh hưởng đến loadavg?
   - Cpu Utilazion
   - Disk I/O
   - Network Traffic
+
+```sh
+  #!/bin/sh
+  CPU=`cat /sys/devices/system/cpu/online`
+  Count=$(echo  $CPU | cut -d '-' -f2 )
+  CPUs=`expr $Count + 1`
+  echo "so luong CPU la: $CPUs"
+  AVG=`uptime`
+  a=$(echo $AVG | awk '{print $8}'| cut -f 1  -d ","  )
+  b=$(echo $AVG | awk '{print $8}'| cut -f 2  -d ","  )
+  loadavg1minutes=$a.$b
+
+
+  c=$(echo $AVG | awk '{print $9}'| cut -f 1 -d ","  )
+  d=$(echo $AVG | awk '{print $9}'| cut -f 2  -d ","  )
+  loadavg5minutes=$c.$d
+
+  e=$(echo $AVG | awk '{print $10}'| cut -f 1 -d ","  )
+  f=$(echo $AVG | awk '{print $10}'| cut -f 2 -d ","  )
+  loadavg15minutes=$e.$f
+  echo $loadavg1minutes $loadavg5minutes $loadavg15minutes
+
+  if [ $loadavg1minutes -ge $CPUs ]; then
+  	echo "Warning"
+  fi
+
+  ```

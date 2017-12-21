@@ -96,28 +96,36 @@ Những yếu tố nào ảnh hưởng đến loadavg?
   - Network Traffic
 
 ```sh
-  #!/bin/sh
-  CPU=`cat /sys/devices/system/cpu/online`
-  Count=$(echo  $CPU | cut -d '-' -f2 )
-  CPUs=`expr $Count + 1`
-  echo "so luong CPU la: $CPUs"
-  AVG=`uptime`
-  a=$(echo $AVG | awk '{print $8}'| cut -f 1  -d ","  )
-  b=$(echo $AVG | awk '{print $8}'| cut -f 2  -d ","  )
-  loadavg1minutes=$a.$b
+#!/bin/sh
+ CPU=`cat /sys/devices/system/cpu/online`
+ Count=$(echo  $CPU | cut -d '-' -f2 )
+ CPUs=`expr $Count + 1`
+ CCPUs=$(echo "scale=2;`expr $CPUs/1`" | bc )
 
+ echo "so luong CPU la:  $CCPUs"
+ AVG=`uptime`
+ a=$(echo $AVG | awk '{print $8}'| cut -f 1  -d ","  )
+ b=$(echo $AVG | awk '{print $8}'| cut -f 2  -d ","  )
+ loadavg1minutes=$a.$b
 
-  c=$(echo $AVG | awk '{print $9}'| cut -f 1 -d ","  )
-  d=$(echo $AVG | awk '{print $9}'| cut -f 2  -d ","  )
-  loadavg5minutes=$c.$d
+ c=$(echo $AVG | awk '{print $9}'| cut -f 1 -d ","  )
+ d=$(echo $AVG | awk '{print $9}'| cut -f 2  -d ","  )
+ loadavg5minutes=$c.$d
 
-  e=$(echo $AVG | awk '{print $10}'| cut -f 1 -d ","  )
-  f=$(echo $AVG | awk '{print $10}'| cut -f 2 -d ","  )
-  loadavg15minutes=$e.$f
-  echo $loadavg1minutes $loadavg5minutes $loadavg15minutes
+ e=$(echo $AVG | awk '{print $10}'| cut -f 1 -d ","  )
+ f=$(echo $AVG | awk '{print $10}'| cut -f 2 -d ","  )
+ loadavg15minutes=$e.$f
+ echo "load avg: $loadavg1minutes  $loadavg5minutes $loadavg15minutes"
 
-  if [ $loadavg1minutes -ge $CPUs ]; then
-  	echo "Warning"
-  fi
+ if [[ $loadavg1minutes > $CCPUs ]]
+ then
+   echo "Warning loadavg1minutes "
+ elif [[ $loadavg1minutes = $CCPUs ]]
+ then
+ echo "Warning  loadavg1minutes = CCPUs "
+ else 	
+ echo "Loadavg OK"
+ fi
+
 
   ```

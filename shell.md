@@ -21,7 +21,7 @@ chuẩn, vì vậy vẫn là một thói quen tốt cho lập trình viên nếu
 script trong một shell phụ (như gọi sh chẳng hạn), khi đó mọi thay đổi về môi
 trường mà script gây ra không ảnh hưởng đến môi trường làm việc chính.*
 
-<img src="https://imgur.com/a/bTAHt">
+![image](./images/avatar.jpg)
 
 
 MSql work bench
